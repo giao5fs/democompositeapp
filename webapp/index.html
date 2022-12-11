@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MyModule">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./angular.js"></script>
+    <script src="./index.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div ng-controller="myController">
+        <table>
+            <thead>
+                <tr>
+                    <th> Name </th>
+                    <th> Phone </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="friend in friends">
+                    <td> {{ friend.name | uppercase}} </td>
+                    <td> {{ friend.phone | lowercase}} </td>
+                </tr>
+            </tbody>
+           
+        </table>
+       
+    </div>
+</body>
+</html>
