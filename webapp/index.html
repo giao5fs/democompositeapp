@@ -11,20 +11,31 @@
 </head>
 <body>
     <div ng-controller="myController">
+        Row to display: <input type="number" step="1" min="0" max="5" ng-model="rowlimit"> 
+        Search Text: <input type="text" placeholder="Search here!" ng-model="searchText">
+        Order By:   <select ng-model="sortColumn">
+                        <option value="name">Name ASC</option>
+                        <option value="phone">Phone DESC</option>
+                        <option value="like">Like ASC</option>
+                    </select>
         <table>
             <thead>
                 <tr>
-                    <th> Name </th>
-                    <th> Phone </th>
+                    <th ng-click="sortData('name')"> Name <div ng-class="getSortClass('name')"></div></th>
+                    <th ng-click="sortData('phone')"> Phone <div ng-class="getSortClass('phone')"></div></th>
+                    <th ng-click="sortData('like')"> Like <div ng-class="getSortClass('like')"></div></th>
+                    <th> Function </th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="friend in friends">
+                <tr ng-repeat="friend in friends | limitTo:rowlimit | filter:searchText | orderBy:sortColumn:reverseSort">
                     <td> {{ friend.name | uppercase}} </td>
                     <td> {{ friend.phone | lowercase}} </td>
+                    <td> {{ friend.like | lowercase}} </td>
+                    <td> <input type="button" ng-click="increase(friend)" value="Increase"">
+                    </td> 
                 </tr>
             </tbody>
-           
         </table>
        
     </div>
