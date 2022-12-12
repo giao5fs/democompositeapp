@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MyModule">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../angular.js"></script>
+    <script src="../index.js"></script>
+    <script src="./login.js"></script>
+    <link rel="stylesheet" href="./login.css">
+    <title>Login</title>
+</head>
+
+<body>
+    <div ng-controller="loginController">
+        <div>
+            <h3> {{ message }} </h3>
+        </div>
+        <div>
+            <label>User name:</label>
+            <input type="text" placeholder="Enter username.." ng-model="myusername"></input>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" placeholder="Enter password.." ng-model="mypassword"></input>
+        </div>
+        <div>
+            <input type="button" ng-click="login()" value="Login"> 
+        </div>
+    </div>
+</body>
+</html> 

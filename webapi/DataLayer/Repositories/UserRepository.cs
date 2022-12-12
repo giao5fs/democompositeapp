@@ -1,5 +1,6 @@
 ﻿using webapi.DataLayer.Repositories.Base;
 using webapi.Models.BasicModel;
+using webapi.Models.RequestModel;
 
 namespace webapi.DataLayer.Repositories
 {
@@ -30,6 +31,19 @@ namespace webapi.DataLayer.Repositories
         public User GetById(int id)
         {
             return context.Set<User>().Find(id);
+        }
+
+        public User GetByName(LoginRequestModel model)
+        {
+            var user = (from u in context.Set<User>()
+                        where u.UserName == model.UserName
+                                  && u.Password == model.Password
+                        select u).FirstOrDefault();
+            if (user is null)
+            {
+                return null;
+            }
+            return user;
         }
 
         public bool Insert(User entity)

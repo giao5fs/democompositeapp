@@ -1,13 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using webapi.Commons;
+using webapi.DataLayer.Cache;
 using webapi.DataLayer.Repositories;
 using webapi.DataLayer.Repositories.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var conStr = builder.Configuration.GetConnectionString("DBCS");
+var conStr = builder.Configuration.GetConnectionString(Environment.MachineName);
+
+builder.Services.AddScoped<UserRepository>();
+
+builder.Services.AddScoped<IUserRepository, CacheUserRepository>();
+
+builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
+
+builder.Services.AddMemoryCache();
 
 builder.Services.AddControllers();
+
+builder.Services.AddCors(action =>
+{
+    action.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("*");
+    });
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -16,9 +33,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
 
 var app = builder.Build();
 
@@ -30,6 +44,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

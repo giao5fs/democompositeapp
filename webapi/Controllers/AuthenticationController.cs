@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using webapi.Commons;
 using webapi.DataLayer.Repositories;
-using webapi.Models.ApiModel;
 using webapi.Models.BasicModel;
+using webapi.Models.RequestModel;
+using webapi.Models.ResponseModel;
 
 namespace webapi.Controllers;
 [ApiController]
@@ -22,18 +23,14 @@ public class AuthenticationController : ControllerBase
     }
     [Route("api/authenication/Login")]
     [HttpPost]
-    public IActionResult Login([FromBody] LoginModel loginModel)
+    public IActionResult Login([FromBody] LoginRequestModel loginRequest)
     {
-        if (string.IsNullOrEmpty(loginModel.UserName) || string.IsNullOrEmpty(loginModel.Password))
+        if (string.IsNullOrEmpty(loginRequest.UserName) || string.IsNullOrEmpty(loginRequest.Password))
         {
             return BadRequest(ApiResponseCode.LOGIN_ERROR);
         }
 
-
-        var user = (from u in userRepository.GetAll()
-                    where u.UserName == loginModel.UserName
-                    && u.Password == loginModel.Password
-                    select u).FirstOrDefault();
+        var user = userRepository.GetByName(loginRequest);
 
         if(user is null)
         {
@@ -41,7 +38,7 @@ public class AuthenticationController : ControllerBase
         }
 
         bool IsNeedToGenToken = true;
-        UserLogin userLogin = new UserLogin();
+        LoginResponseModel loginResponse = new();
         if (IsNeedToGenToken)
         {
             var session = userSessionRepository.GetById(user.Id);
@@ -55,11 +52,11 @@ public class AuthenticationController : ControllerBase
                 session.GenerateNewSessionToken();
                 userSessionRepository.Update(session);
             }
-            userLogin.UserId = user.Id;
-            userLogin.UserName = user.UserName;
-            userLogin.SessionToken = session.SessionToken.ToString();
+            loginResponse.UserId = user.Id;
+            loginResponse.UserName = user.UserName;
+            loginResponse.SessionToken = session.SessionToken.ToString();
         }
-        return Ok(userLogin);
+        return Ok(loginResponse);
     }
 }
 

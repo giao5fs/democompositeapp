@@ -1,6 +1,6 @@
-﻿namespace webapi.Models.ApiModel
+﻿namespace webapi.Models.ResponseModel
 {
-    public class UserLogin
+    public class LoginResponseModel
     {
         public int UserId { get; set; }
         public string UserName { get; set; }

@@ -12,8 +12,8 @@ using webapi.DataLayer.Repositories.Base;
 namespace webapi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221210224838_First")]
-    partial class First
+    [Migration("20221212034810_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
